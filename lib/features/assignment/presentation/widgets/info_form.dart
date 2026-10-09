@@ -189,7 +189,7 @@ class InfoForm extends ConsumerWidget {
               ),
             ),
 
-            // ── Group toggle (premium switch card) ──
+            // ── Group toggle ──
             const SizedBox(height: 4),
             _GroupToggle(
               s: s,
@@ -253,14 +253,27 @@ class InfoForm extends ConsumerWidget {
     );
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // ✅ FIXED — file_picker v13.1.0 API
+  // ═══════════════════════════════════════════════════════════
   Future<void> _pickLogo(WidgetRef ref) async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      withData: true,
-    );
-    final bytes = result?.files.single.bytes;
-    if (bytes != null) {
-      ref.read(assignmentProvider.notifier).setLogo(bytes);
+    try {
+      // v13.1.0: pickFiles() — no `allowMultiple` parameter
+      // Returns: List<PlatformFile> (empty if user cancels)
+      final files = await FilePicker.pickFiles(
+        type: FileType.image,
+      );
+
+      if (files.isEmpty) return;
+
+      // Take first (and only) file
+      final bytes = await files.first.readAsBytes();
+      if (bytes.isNotEmpty) {
+        ref.read(assignmentProvider.notifier).setLogo(bytes);
+      }
+    } catch (e, st) {
+      // Silent — user probably cancelled
+      debugPrint('Logo pick failed: $e\n$st');
     }
   }
 }
@@ -302,7 +315,6 @@ class _LogoPicker extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Preview box
           AnimatedContainer(
             duration: const Duration(milliseconds: 220),
             width: 52,
@@ -336,8 +348,6 @@ class _LogoPicker extends StatelessWidget {
                   ),
           ),
           const SizedBox(width: 14),
-
-          // Label + action
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,8 +373,6 @@ class _LogoPicker extends StatelessWidget {
               ],
             ),
           ),
-
-          // Actions
           if (hasLogo)
             IconButton(
               tooltip: s.t('removeLogo'),
@@ -389,7 +397,7 @@ class _LogoPicker extends StatelessWidget {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// GROUP TOGGLE — premium switch card
+// GROUP TOGGLE
 // ═══════════════════════════════════════════════════════════════
 class _GroupToggle extends StatelessWidget {
   const _GroupToggle({
@@ -442,7 +450,10 @@ class _GroupToggle extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: value
                   ? const LinearGradient(
-                      colors: [InfoForm._primaryStart, InfoForm._primaryEnd],
+                      colors: [
+                        InfoForm._primaryStart,
+                        InfoForm._primaryEnd,
+                      ],
                     )
                   : null,
               color: value
@@ -454,8 +465,7 @@ class _GroupToggle extends StatelessWidget {
               boxShadow: value
                   ? [
                       BoxShadow(
-                        color:
-                            InfoForm._primaryStart.withOpacity(0.35),
+                        color: InfoForm._primaryStart.withOpacity(0.35),
                         blurRadius: 12,
                         offset: const Offset(0, 3),
                       ),
@@ -511,7 +521,7 @@ class _GroupToggle extends StatelessWidget {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// MEMBER EDITOR — with reorder + delete
+// MEMBER EDITOR
 // ═══════════════════════════════════════════════════════════════
 class _MemberEditor extends ConsumerWidget {
   const _MemberEditor({
@@ -551,7 +561,6 @@ class _MemberEditor extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header row with badge + actions
           Row(
             children: [
               Container(
@@ -577,15 +586,12 @@ class _MemberEditor extends ConsumerWidget {
                 ),
               ),
               const Spacer(),
-
-              // Move up
               if (onMoveUp != null)
                 _MiniIconButton(
                   icon: Icons.keyboard_arrow_up_rounded,
                   onTap: onMoveUp!,
                   tooltip: 'Move up',
                 ),
-              // Move down
               if (onMoveDown != null)
                 _MiniIconButton(
                   icon: Icons.keyboard_arrow_down_rounded,
@@ -593,7 +599,6 @@ class _MemberEditor extends ConsumerWidget {
                   tooltip: 'Move down',
                 ),
               const SizedBox(width: 4),
-              // Delete
               _MiniIconButton(
                 icon: Icons.close_rounded,
                 onTap: () => n.removeMember(index),
@@ -603,8 +608,6 @@ class _MemberEditor extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 10),
-
-          // Name
           AppTextField(
             label: s.t('studentName'),
             value: member.name,
@@ -612,8 +615,6 @@ class _MemberEditor extends ConsumerWidget {
                 n.updateMember(index, member.copyWith(name: v)),
           ),
           const SizedBox(height: 8),
-
-          // ID + Roll
           Row(
             children: [
               Expanded(

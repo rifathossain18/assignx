@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/cover_args.dart';
-import '../../domain/template_config.dart';
 import 'base/cover_content.dart';
 import 'base/cover_page.dart';
 import 'base/frame_box.dart';
