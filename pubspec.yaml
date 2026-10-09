@@ -1,0 +1,71 @@
+name: assignx
+description: Assignment cover page maker (Flutter Web)
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  google_fonts: ^6.2.1
+  pdf: ^3.11.0
+  printing: ^5.13.1
+  shared_preferences: ^2.3.2
+  file_picker: ^8.1.2
+  file_saver: ^0.2.14
+  intl: ^0.19.0
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  change_app_name: ^1.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/
+
+  fonts:
+    - family: Hind Siliguri
+      fonts:
+        - asset: assets/fonts/HindSiliguri-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/HindSiliguri-Bold.ttf
+          weight: 700
+
+    - family: Noto Sans Bengali
+      fonts:
+        - asset: assets/fonts/NotoSansBengali-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSansBengali-Bold.ttf
+          weight: 700
+
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+
+    - family: Playfair Display
+      fonts:
+        - asset: assets/fonts/PlayfairDisplay-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlayfairDisplay-Bold.ttf
+          weight: 700
+
+
