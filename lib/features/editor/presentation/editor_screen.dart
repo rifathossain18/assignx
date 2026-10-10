@@ -56,6 +56,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
   void initState() {
     super.initState();
 
+    // Entrance animation
     _entranceController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -73,11 +74,13 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
     ));
     _entranceController.forward();
 
+    // Aurora loop
     _aurora = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 22),
     )..repeat();
 
+    // Listen to changes → schedule auto-save
     ref.listenManual(assignmentProvider, (_, __) => _markDirty());
     ref.listenManual(templateConfigProvider, (_, __) => _markDirty());
   }
@@ -155,7 +158,10 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
               body: Stack(
                 fit: StackFit.expand,
                 children: [
+                  // ── Animated aurora background ──
                   _AuroraBackground(animation: _aurora, isDark: isDark),
+
+                  // ── Main content with entrance animation ──
                   FadeTransition(
                     opacity: _fadeIn,
                     child: SlideTransition(
@@ -165,6 +171,8 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
                           : _buildNarrowLayout(isDark),
                     ),
                   ),
+
+                  // ── Export loading overlay ──
                   if (_isExporting) const _ExportingOverlay(),
                 ],
               ),
@@ -264,7 +272,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
         ],
       ),
       actions: [
-        // ── Telegram badge (shows when inside Telegram) ──
+        // ── Telegram badge ──
         if (TelegramService.isInTelegram)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
@@ -857,7 +865,7 @@ class _EditorScreenState extends ConsumerState<EditorScreen>
           icon: Icons.error_outline,
         );
       }
-    } catch (e) {
+    } catch (_) {
       if (mounted) {
         _snack(
           s.t('exportFailed'),
