@@ -171,8 +171,8 @@ class AppStrings {
 // PROVIDERS
 // ═══════════════════════════════════════════════════════════════
 
-/// true = Bangla, false = English.
-final languageProvider = StateProvider<bool>((ref) => true);
+/// false = Bangla, true = English.
+final languageProvider = StateProvider<bool>((ref) => false);
 
 /// Read-only strings provider — rebuilds whenever language changes.
 final stringsProvider = Provider<AppStrings>(
