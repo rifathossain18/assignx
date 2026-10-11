@@ -1,7 +1,18 @@
-assignx
+<p align="center">
+  <img src="assets/banner.png"
+       alt="AssignX Assignment Cover Page Maker"
+       width="100%">
+</p>
 
-A simple web app for creating assignment cover pages quickly and easily.
+<h1 align="center">AssignX</h1>
 
-https://rifathossain18.github.io/assignx/
+<p align="center">
+  A simple web app for creating assignment cover pages quickly and easily.
+</p>
 
-assignment-cover-page, student-tools, web-app, education, html, css, javascript
+<p align="center">
+  <a href="https://rifathossain18.github.io/assignx/">
+    Live Demo
+  </a>
+</p>
+
